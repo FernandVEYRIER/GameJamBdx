@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class CanvasManager : MonoBehaviour {
 
@@ -12,11 +13,18 @@ public class CanvasManager : MonoBehaviour {
 	private GameObject beginBox;
 	[SerializeField]
 	private GameObject HUD;
+	[SerializeField]
+	private GameObject timer;
 
 	[SerializeField]
 	private GameObject[] itemButtons;
 
 	private Dictionary<string, Item> inventory = new Dictionary<string, Item>();
+	private Item selectedItem = null;
+	private float timeElapsed = 0;
+
+	[HideInInspector]
+	public bool bIsPlaying;
 
 	// Use this for initialization
 	void Start () 
@@ -28,6 +36,7 @@ public class CanvasManager : MonoBehaviour {
 		inventory.Add ("Rain", new Item(1, 30));
 		inventory.Add ("Wind", new Item(0, 60));
 		inventory.Add ("Cyclone", new Item(0, 90));
+		bIsPlaying = false;
 		UpdateInventory();
 	}
 
@@ -36,6 +45,21 @@ public class CanvasManager : MonoBehaviour {
 		HUD.SetActive(bIsDisplayed);
 		beginBox.SetActive(!bIsDisplayed);
 		infoBox.SetActive(bIsDisplayed);
+		UpdateInventory();
+	}
+
+	public void StartItemGeneration()
+	{
+		for (int i = 0; i < inventory.Count; i++)
+		{
+			StartCoroutine( GetItem(inventory.Keys.ElementAt(i), inventory[inventory.Keys.ElementAt(i)].Influence) 	);
+		}
+	}
+
+	IEnumerator GetItem(string itemIndex, int itemDelay)
+	{
+		yield return new WaitForSeconds(itemDelay);
+		inventory[itemIndex].Quantity++;
 		UpdateInventory();
 	}
 
@@ -51,10 +75,34 @@ public class CanvasManager : MonoBehaviour {
 			}
 		}
 	}
+
+	public void SelectItem(int itemIndex)
+	{
+		if (itemIndex < inventory.Count && inventory[inventory.Keys.ElementAt(itemIndex)].Quantity > 0)
+		{
+			selectedItem = inventory[inventory.Keys.ElementAt(itemIndex)];
+		}
+		else
+		{
+			selectedItem = null;
+		}
+	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update ()
+	{
+		if (bIsPlaying)
+		{
+			TimeSpan timeDisp = TimeSpan.FromSeconds(timeElapsed);
+			timer.GetComponent<Text>().text = timeDisp.ToString().Substring(0, timeDisp.ToString().Length - 8);
+			timeElapsed += Time.deltaTime;
+		}
+		else
+		{
+			CancelInvoke();
+		}
+		if (selectedItem != null)
+		Debug.Log(selectedItem.Influence);
 	}
 
 	public void UpdateInfoBox(int naturePercent)

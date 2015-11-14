@@ -43,6 +43,8 @@ public class Selector : MonoBehaviour {
             map.First = false;
             map.SetSidesQuad();
 			canvas.ShowHUD(true);
+			canvas.bIsPlaying = true;
+			canvas.StartItemGeneration();
         }
         else if (res)
         {
