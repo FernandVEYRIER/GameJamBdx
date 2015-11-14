@@ -36,10 +36,10 @@ public class CanvasManager : MonoBehaviour {
 		ShowHUD(false);
 
 		// Initialise les objets
-		inventory.Add("Seeds", new Item(10, 85, 20, itemPrefabs[0]));
+		inventory.Add("Seeds", new Item(10, 15, 20, itemPrefabs[0]));
 		inventory.Add ("Rain", new Item(5, 30, 15, itemPrefabs[1]));
-		inventory.Add ("Wind", new Item(3, 60, 10, itemPrefabs[0]));
-		inventory.Add ("Tornado", new Item(1, 90, 6, itemPrefabs[0]));
+		inventory.Add ("Wind", new Item(3, 60, 10, itemPrefabs[2]));
+		inventory.Add ("Tornado", new Item(100, 90, 6, itemPrefabs[3]));
 		bIsPlaying = false;
 		UpdateInventory();
 	}
