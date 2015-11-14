@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class CanvasManager : MonoBehaviour {
 
@@ -77,7 +78,8 @@ public class CanvasManager : MonoBehaviour {
 	{
 		if (bIsPlaying)
 		{
-			timer.GetComponent<Text>().text = "Timer : " + timeElapsed.ToString("c0");
+			TimeSpan timeDisp = TimeSpan.FromSeconds(timeElapsed);
+			timer.GetComponent<Text>().text = timeDisp.ToString().Substring(0, timeDisp.ToString().Length - 8);
 			timeElapsed += Time.deltaTime;
 		}
 	}

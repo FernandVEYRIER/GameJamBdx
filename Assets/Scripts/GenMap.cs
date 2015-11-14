@@ -56,11 +56,11 @@ public class GenMap : MonoBehaviour {
 
         size = (size * size) * 6;
         cubes.ForEach((item) => { dupli_cubes.Add(item); });
-        for (int i = 0; i < cubes.Count; i++)
-        {
-            print(dupli_cubes[i].GetHashCode());
-            print(cubes[i].GetHashCode());
-        }
+//        for (int i = 0; i < cubes.Count; i++)
+//        {
+//            print(dupli_cubes[i].GetHashCode());
+//            print(cubes[i].GetHashCode());
+//        }
 	}
 
     public void makeCoffee()
