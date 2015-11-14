@@ -42,7 +42,7 @@ public class Selector : MonoBehaviour {
             hit.transform.GetComponent<InfosCase>().Colonise = true;
             map.First = false;
             map.makeCoffee();
-           
+			canvas.ShowHUD(true);
         }
         else if (res)
         {

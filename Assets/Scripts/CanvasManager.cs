@@ -8,6 +8,10 @@ public class CanvasManager : MonoBehaviour {
 
 	[SerializeField]
 	private GameObject infoBox;
+	[SerializeField]
+	private GameObject beginBox;
+	[SerializeField]
+	private GameObject HUD;
 
 	[SerializeField]
 	private GameObject[] itemButtons;
@@ -17,6 +21,8 @@ public class CanvasManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		ShowHUD(false);
+
 		// Initialise les objets
 		inventory.Add("Seeds", new Item(5, 10));
 		inventory.Add ("Rain", new Item(1, 30));
@@ -25,10 +31,18 @@ public class CanvasManager : MonoBehaviour {
 		UpdateInventory();
 	}
 
+	public void ShowHUD(bool bIsDisplayed)
+	{
+		HUD.SetActive(bIsDisplayed);
+		beginBox.SetActive(!bIsDisplayed);
+		infoBox.SetActive(bIsDisplayed);
+		UpdateInventory();
+	}
+
 	void UpdateInventory()
 	{
 		// Pour chaque item
-		for (int i = 0; i < inventory.Count; i++)
+		for (int i = 0; infoBox.activeSelf && i < inventory.Count; i++)
 		{
 			// On met à jour le texte
 			if (i < itemButtons.Length)
