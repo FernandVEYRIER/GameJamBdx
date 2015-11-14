@@ -48,6 +48,21 @@ public class CanvasManager : MonoBehaviour {
 		UpdateInventory();
 	}
 
+	public void StartItemGeneration()
+	{
+		for (int i = 0; i < inventory.Count; i++)
+		{
+			StartCoroutine( GetItem(inventory.Keys.ElementAt(i), inventory[inventory.Keys.ElementAt(i)].Influence) 	);
+		}
+	}
+
+	IEnumerator GetItem(string itemIndex, int itemDelay)
+	{
+		yield return new WaitForSeconds(itemDelay);
+		inventory[itemIndex].Quantity++;
+		UpdateInventory();
+	}
+
 	void UpdateInventory()
 	{
 		// Pour chaque item
@@ -82,6 +97,12 @@ public class CanvasManager : MonoBehaviour {
 			timer.GetComponent<Text>().text = timeDisp.ToString().Substring(0, timeDisp.ToString().Length - 8);
 			timeElapsed += Time.deltaTime;
 		}
+		else
+		{
+			CancelInvoke();
+		}
+		if (selectedItem != null)
+		Debug.Log(selectedItem.Influence);
 	}
 
 	public void UpdateInfoBox(int naturePercent)

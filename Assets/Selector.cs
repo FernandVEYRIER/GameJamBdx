@@ -44,6 +44,7 @@ public class Selector : MonoBehaviour {
             map.makeCoffee();
 			canvas.ShowHUD(true);
 			canvas.bIsPlaying = true;
+			canvas.StartItemGeneration();
         }
         else if (res)
         {
