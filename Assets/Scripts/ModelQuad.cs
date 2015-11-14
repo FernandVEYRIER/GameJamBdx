@@ -14,7 +14,7 @@ public class ModelQuad : MonoBehaviour {
         Build();
     }
 
-    private void Build() {
+    public void Build() {
         float unit = prefab.GetComponent<Renderer>().bounds.size.x;
         GameObject front = SetFace(unit);
         front.transform.parent = transform;
