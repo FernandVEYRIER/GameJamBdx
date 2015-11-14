@@ -12,11 +12,18 @@ public class CanvasManager : MonoBehaviour {
 	private GameObject beginBox;
 	[SerializeField]
 	private GameObject HUD;
+	[SerializeField]
+	private GameObject timer;
 
 	[SerializeField]
 	private GameObject[] itemButtons;
 
 	private Dictionary<string, Item> inventory = new Dictionary<string, Item>();
+	private Item selectedItem = null;
+	private float timeElapsed = 0;
+
+	[HideInInspector]
+	public bool bIsPlaying;
 
 	// Use this for initialization
 	void Start () 
@@ -28,6 +35,7 @@ public class CanvasManager : MonoBehaviour {
 		inventory.Add ("Rain", new Item(1, 30));
 		inventory.Add ("Wind", new Item(0, 60));
 		inventory.Add ("Cyclone", new Item(0, 90));
+		bIsPlaying = false;
 		UpdateInventory();
 	}
 
@@ -51,10 +59,27 @@ public class CanvasManager : MonoBehaviour {
 			}
 		}
 	}
+
+	public void SelectItem(int itemIndex)
+	{
+		if (itemIndex < inventory.Count && inventory[inventory.Keys.ElementAt(itemIndex)].Quantity > 0)
+		{
+			selectedItem = inventory[inventory.Keys.ElementAt(itemIndex)];
+		}
+		else
+		{
+			selectedItem = null;
+		}
+	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update ()
+	{
+		if (bIsPlaying)
+		{
+			timer.GetComponent<Text>().text = "Timer : " + timeElapsed.ToString("c0");
+			timeElapsed += Time.deltaTime;
+		}
 	}
 
 	public void UpdateInfoBox(int naturePercent)

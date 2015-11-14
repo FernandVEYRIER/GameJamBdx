@@ -43,6 +43,7 @@ public class Selector : MonoBehaviour {
             map.First = false;
             map.makeCoffee();
 			canvas.ShowHUD(true);
+			canvas.bIsPlaying = true;
         }
         else if (res)
         {
