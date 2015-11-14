@@ -4,6 +4,9 @@ using System.Collections;
 public class ModelQuad : MonoBehaviour {
 
     public GameObject prefab;
+	// Contient les props à mettre sur le terrain
+	public GameObject[] terrainProps;
+
     private int size = 9;
     private Quad[] quads = new Quad[486];
     private Quad[] DupliQuads = new Quad[486];
@@ -61,6 +64,13 @@ public class ModelQuad : MonoBehaviour {
                 quad.Percent = Random.Range(0, 100);
                 quads[i + j] = quad;
                 tmp.transform.parent = obj.transform;
+
+				if (terrainProps.Length > 0)
+				{
+					int itemIndex = (terrainProps.Length - 1) * (quad.Percent);
+					tmp = (GameObject) Instantiate(terrainProps[itemIndex], tmp.transform.position, Quaternion.Euler(tmp.transform.right));
+					tmp.transform.parent = obj.transform;
+                }
             }
         }
         return obj;
