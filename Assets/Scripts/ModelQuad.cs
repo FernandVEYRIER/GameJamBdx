@@ -1,14 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ModelQuad : MonoBehaviour {
 
     public GameObject prefab;
     private int size = 9;
+    private int total_size = 486;
     private Quad[] quads = new Quad[486];
     private Quad[] DupliQuads = new Quad[486];
     private GameObject[] cubes = new GameObject[6];
-
+    private bool first;
+    public bool First
+    {
+        get { return first; }
+        set { first = value; }
+    }
     public void Start() {
 
         Build();
@@ -59,6 +66,7 @@ public class ModelQuad : MonoBehaviour {
                 GameObject tmp = (GameObject)Instantiate(prefab, new Vector3(unit * (1 + i) + calc_center, unit * (1 + j) + calc_center, (-unit / 2) * size), Quaternion.identity);
                 Quad quad = new Quad();
                 quad.Percent = Random.Range(0, 100);
+                quad.ID = tmp.GetHashCode();
                 quads[i + j] = quad;
                 tmp.transform.parent = obj.transform;
             }
@@ -66,23 +74,38 @@ public class ModelQuad : MonoBehaviour {
         return obj;
     }
 
-    private int[] MappingCube(int index){
-        
-        int[] sides = new int[4];
-        if (quads[index + 1] != null) {
-            sides[0] = index + 1;
+    public void SetSidesQuad() {
+
+        for (int i = 0; i < total_size; i++)
+        {
+            Transform[] blocks = GameObject.Find(quads[i].ID.ToString()).GetComponent<InfosCase>().Blocks.ToArray();
+            print(blocks.Length);
         }
-            
-        return sides;
+        //this.enabled = false;
     }
+
+    //private int[] MappingCube(int index){
+
+    //    int cube = index / (size * size);
+    //    int[] sides = new int[4];
+        
+            
+    //    return sides;
+    //}
 
     class Quad { 
         private bool colonised = false;
         private int percent;
+        private int id;
         public int Percent
         {
             get { return percent; }
             set { percent = value; }
+        }
+        public int ID
+        {
+            get { return id; }
+            set { id = value; }
         }
         public bool Colonised
         {

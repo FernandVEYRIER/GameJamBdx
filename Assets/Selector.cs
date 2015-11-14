@@ -38,10 +38,10 @@ public class Selector : MonoBehaviour {
         }
         else if (res && Input.GetMouseButtonDown(0) && GameObject.FindGameObjectWithTag("Map").GetComponent<GenMap>().First)
         {
-            GenMap map = GameObject.FindGameObjectWithTag("Map").GetComponent<GenMap>();
+            ModelQuad map = GameObject.FindGameObjectWithTag("Map").GetComponent<ModelQuad>();
             hit.transform.GetComponent<InfosCase>().Colonise = true;
             map.First = false;
-            map.makeCoffee();
+            map.SetSidesQuad();
 			canvas.ShowHUD(true);
         }
         else if (res)
