@@ -43,13 +43,21 @@ public class Selector : MonoBehaviour {
             map.First = false;
             map.SetSidesQuad();
 			canvas.ShowHUD(true);
-			canvas.bIsPlaying = true;
+			CanvasManager.bIsPlaying = true;
 			canvas.StartItemGeneration();
         }
         else if (res)
         {
-            //print(hit.transform.GetComponent<InfosCase>().Percent);
-			canvas.UpdateInfoBox(hit.transform.GetComponent<InfosCase>().Percent);
+			if (canvas.selectedItem != null && Input.GetMouseButtonDown(0))
+			{
+				if (canvas.UseItem())
+				{
+					GameObject go = (GameObject) Instantiate(canvas.selectedItem.ItemPrefab, hit.transform.position, hit.transform.rotation);
+					go.transform.SetParent(hit.transform);
+					hit.transform.GetComponent<InfosCase>().SetBonus(canvas.selectedItem);
+				}
+			}
+			canvas.UpdateInfoBox(hit.transform.GetComponent<InfosCase>().Percent, hit.transform.GetComponent<InfosCase>().Bonus);
         }
 		else if (!res)
 		{

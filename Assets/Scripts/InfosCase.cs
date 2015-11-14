@@ -10,6 +10,41 @@ public class InfosCase : MonoBehaviour {
     private bool colonise = false;
     private int percent = 0;
     private List<Transform> conneted_block = new List<Transform>();
+
+	private List<Item> activeItems = new List<Item>();
+
+	class Item
+	{
+		float duration;
+		int influence;
+
+		public float Duration
+		{
+			get { return duration; }
+			set { duration = value; }
+		}
+
+		public int Influence
+		{
+			get { return influence; }
+			set { influence = value; }
+		}
+
+		public Item(float _duration, int _influence)
+		{
+			duration = _duration;
+			influence = _influence;
+		}
+	}
+
+	// Bonus appliqué à la case
+	private int bonus = 0;
+
+	public int Bonus
+	{
+		get { return bonus; }
+	}
+
     public int Status
     {
         get { return status; }
@@ -30,12 +65,39 @@ public class InfosCase : MonoBehaviour {
         get { return colonise; }
         set { GetComponent<MeshRenderer>().material = (value)?nature:human;colonise = value; }
     }
-	// Use this for initialization
+
 	void Start () {
         GetComponent<MeshRenderer>().material = human;
         //InvokeRepeating("growOrDie", 0, 1.0f);
 	}
-	
+
+	public void SetBonus(CanvasManager.Item value)
+	{
+		activeItems.Add (new Item(value.Duration, value.Influence));
+		bonus += value.Influence;
+	}
+
+	void Update()
+	{
+		// Pour chaque item sur cette case
+		for (int i = 0; i < activeItems.Count; i++)
+		{
+			// On fait diminuer le temps d'action de l'item
+			activeItems[i].Duration -= Time.deltaTime;
+			// S'il n'a plus d'influence on le vire
+			if (activeItems[i].Duration <= 0)
+			{
+				// Et on remove le prefab associé au buff
+				if (this.transform.childCount != 0)
+				{
+					Destroy(this.transform.GetChild(0).gameObject);
+				}
+				bonus -= activeItems[i].Influence;
+				activeItems.RemoveAt(i);
+			}
+		}
+	}
+
 	// Update is called every second
 	void growOrDie () {
 

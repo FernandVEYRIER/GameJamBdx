@@ -11,13 +11,18 @@ public class GenMap : MonoBehaviour {
     private List<GameObject> dupli_cubes = new List<GameObject>();
     private SphereCollider[] all_spheres;
     private Rigidbody[] all_rigidbodies;
+	
+	private int [] statTab;
+
     public bool First
     {
         get { return first; }
         set { first = value; }
     }
+
     void Awake() {
     }
+
     private GameObject setFace(float unit) { 
         
         GameObject obj = new GameObject();
@@ -65,62 +70,132 @@ public class GenMap : MonoBehaviour {
 
     public void makeCoffee()
     {
-
-        StartCoroutine("growOrDie");
-        
+		statTab = new int[cubes.Count];
+		StartCoroutine("growOrDie");
     }
 
-    IEnumerator growOrDie()
-    {
+	IEnumerator growOrDie()
+	{
+		for (int i = 0; i < size; i++)
+		{
+			List<Transform> blocks = cubes[i].GetComponent<InfosCase>().Blocks;
+			if (blocks.Count != 0)
+			{
+				if (cubes[i].GetComponent<SphereCollider>())
+				{
+					all_spheres = FindObjectsOfType<SphereCollider>();
+					all_rigidbodies = FindObjectsOfType<Rigidbody>();
+					foreach (SphereCollider sphere_collider in all_spheres)
+					{
+						sphere_collider.enabled = false;
+					}
+					foreach (Rigidbody rigidbody in all_rigidbodies)
+					{
+						Destroy(rigidbody);
+					}
+				}
+			}
+		}
 
-        while (true)
-        {
-            for (int i = 0; i < size; i++)
-            {
-                List<Transform> blocks = cubes[i].GetComponent<InfosCase>().Blocks;
-                if (blocks.Count != 0)
-                {
-                    if (cubes[i].GetComponent<SphereCollider>())
-                    {
-                        all_spheres = FindObjectsOfType<SphereCollider>();
-                        all_rigidbodies = FindObjectsOfType<Rigidbody>();
-                        foreach (SphereCollider sphere_collider in all_spheres)
-                        {
-                            sphere_collider.enabled = false;
-                        }
-                        foreach (Rigidbody rigidbody in all_rigidbodies)
-                        {
-                            Destroy(rigidbody);
-                        }
-                    }
-                    if (!first)
-                    {
-                        int avg = 0;
-                        for (int j = 0; j < blocks.Count; j++)
-                        {
-                            int dice = Random.Range(50, 100);
-                            InfosCase infos_blocks = blocks[j].GetComponent<InfosCase>();
-                            if (infos_blocks.Percent > 50 && dice >= infos_blocks.Percent && cubes[i].GetComponent<InfosCase>().Colonise)
-                            {
-                                int grow = infos_blocks.Percent + cubes[i].GetComponent<InfosCase>().Percent / 2;
-                                if (grow > 100)
-                                {
-                                    infos_blocks.Percent = 100;
-                                }
-                                else
-                                {
-                                    infos_blocks.Percent = grow;
-                                }
-                                infos_blocks.Colonise = true;
-                                blocks[j].GetComponent<MeshRenderer>().material = cubes[i].GetComponent<InfosCase>().nature;
-                                yield return new WaitForSeconds(0.5f);
-                            }
-                            avg += infos_blocks.Percent;
-                        }
-                        cubes[i].GetComponent<InfosCase>().Percent = (avg + cubes[i].GetComponent<InfosCase>().Percent) / (blocks.Count + 1);
-                    }
-                }
-            }
-        }
-    }
+		while (!CanvasManager.bIsPlaying)
+		{
+			yield return new WaitForSeconds(0.1f);
+		}
+
+		// Si on est en partie
+		while (CanvasManager.bIsPlaying)
+		{
+			int avg = 50;
+			// Pour chaque case
+			for (int i = 0; i < size; i++)
+			{
+				InfosCase blockInfo = cubes[i].GetComponent<InfosCase>();
+				avg = 0;
+				// On fait la moyenne des cases voisines
+				foreach (Transform tr in blockInfo.Blocks)
+				{
+					avg += tr.GetComponent<InfosCase>().Percent;
+				}
+				avg /= blockInfo.Blocks.Count;
+				// Si on domine, on gagne 1% + les bonus
+				if (avg > 50)
+				{
+					blockInfo.Percent += Mathf.RoundToInt(1 + (int) (blockInfo.Bonus / 100f * 5));
+				}
+				// Sinon on perd 1 % moins les bonus qu'on a
+				else
+				{
+					blockInfo.Percent -= Mathf.RoundToInt(1 - (int) (blockInfo.Bonus / 100f * 5));
+				}
+
+				// On reste entre 0 et 100
+				blockInfo.Percent = Mathf.Clamp(blockInfo.Percent, 0, 100);
+
+				// Eton met à jour les textures
+				if (blockInfo.Percent > 50)
+				{
+					blockInfo.GetComponent<MeshRenderer>().material = blockInfo.nature;
+				}
+				else
+				{
+					blockInfo.GetComponent<MeshRenderer>().material = blockInfo.human;
+				}
+			}
+			yield return new WaitForSeconds(2f);
+		}
+	}
+
+//    IEnumerator growOrDie()
+//    {
+//
+//        while (true)
+//        {
+//            for (int i = 0; i < size; i++)
+//            {
+//                List<Transform> blocks = cubes[i].GetComponent<InfosCase>().Blocks;
+//                if (blocks.Count != 0)
+//                {
+//                    if (cubes[i].GetComponent<SphereCollider>())
+//                    {
+//                        all_spheres = FindObjectsOfType<SphereCollider>();
+//                        all_rigidbodies = FindObjectsOfType<Rigidbody>();
+//                        foreach (SphereCollider sphere_collider in all_spheres)
+//                        {
+//                            sphere_collider.enabled = false;
+//                        }
+//                        foreach (Rigidbody rigidbody in all_rigidbodies)
+//                        {
+//                            Destroy(rigidbody);
+//                        }
+//                    }
+//                    if (!first)
+//                    {
+//                        int avg = 0;
+//                        for (int j = 0; j < blocks.Count; j++)
+//                        {
+//                            int dice = Random.Range(50, 100);
+//                            InfosCase infos_blocks = blocks[j].GetComponent<InfosCase>();
+//                            if (infos_blocks.Percent > 50 && dice >= infos_blocks.Percent && cubes[i].GetComponent<InfosCase>().Colonise)
+//                            {
+//                                int grow = infos_blocks.Percent + cubes[i].GetComponent<InfosCase>().Percent / 2;
+//                                if (grow > 100)
+//                                {
+//                                    infos_blocks.Percent = 100;
+//                                }
+//                                else
+//                                {
+//                                    infos_blocks.Percent = grow;
+//                                }
+//                                infos_blocks.Colonise = true;
+//                                blocks[j].GetComponent<MeshRenderer>().material = cubes[i].GetComponent<InfosCase>().nature;
+//                                yield return new WaitForSeconds(0.5f);
+//                            }
+//                            avg += infos_blocks.Percent;
+//                        }
+//                        cubes[i].GetComponent<InfosCase>().Percent = (avg + cubes[i].GetComponent<InfosCase>().Percent) / (blocks.Count + 1);
+//                    }
+//                }
+//            }
+//        }
+//    }
 }

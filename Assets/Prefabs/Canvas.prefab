@@ -1137,6 +1137,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b761f476d9b41b49b0e29f29de97614, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemPrefabs:
+  - {fileID: 128160, guid: a6b530831c721344d801f55d12752bf6, type: 2}
+  - {fileID: 128160, guid: a6b530831c721344d801f55d12752bf6, type: 2}
+  - {fileID: 128160, guid: a6b530831c721344d801f55d12752bf6, type: 2}
+  - {fileID: 128160, guid: a6b530831c721344d801f55d12752bf6, type: 2}
   infoBox: {fileID: 166330}
   beginBox: {fileID: 195186}
   HUD: {fileID: 110250}
@@ -1146,7 +1151,6 @@ MonoBehaviour:
   - {fileID: 194878}
   - {fileID: 178682}
   - {fileID: 198680}
-  bIsPlaying: 0
 --- !u!114 &11499994
 MonoBehaviour:
   m_ObjectHideFlags: 1
