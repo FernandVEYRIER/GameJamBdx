@@ -67,7 +67,7 @@ public class ModelQuad : MonoBehaviour {
 
 				if (terrainProps.Length > 0)
 				{
-					int itemIndex = (terrainProps.Length - 1) * (quad.Percent);
+					int itemIndex = (terrainProps.Length - 1) * Mathf.RoundToInt(quad.Percent / 100f);
 					tmp = (GameObject) Instantiate(terrainProps[itemIndex], tmp.transform.position, Quaternion.Euler(tmp.transform.right));
 					tmp.transform.parent = obj.transform;
                 }
