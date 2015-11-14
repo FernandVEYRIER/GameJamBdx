@@ -9,9 +9,11 @@ GameObject:
   m_Component:
   - 4: {fileID: 402072}
   - 114: {fileID: 11467954}
+  - 114: {fileID: 11430722}
+  - 114: {fileID: 11481674}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +30,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11467954
+--- !u!114 &11430722
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -36,11 +38,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 182982}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ac3af6b19629444aeb7c6ac40c28a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11467954
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182982}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c91a2eeefd746247b3696a0c453c318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   size: 9
   plan: {fileID: 165130, guid: a913bfb39a0cea749a9d70674728902d, type: 2}
+--- !u!114 &11481674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a50bf3905bad7fa4f8193ef3ea379771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 165130, guid: a913bfb39a0cea749a9d70674728902d, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

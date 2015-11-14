@@ -8,6 +8,7 @@ public class GenMap : MonoBehaviour {
     public GameObject plan;
     private bool first = true;
     private List<GameObject> cubes = new List<GameObject>();
+    private List<GameObject> dupli_cubes = new List<GameObject>();
     private SphereCollider[] all_spheres;
     private Rigidbody[] all_rigidbodies;
     public bool First
@@ -54,6 +55,12 @@ public class GenMap : MonoBehaviour {
         back.transform.parent = transform;
 
         size = (size * size) * 6;
+        cubes.ForEach((item) => { dupli_cubes.Add(item); });
+        for (int i = 0; i < cubes.Count; i++)
+        {
+            print(dupli_cubes[i].GetHashCode());
+            print(cubes[i].GetHashCode());
+        }
 	}
 
     public void makeCoffee()
@@ -79,11 +86,11 @@ public class GenMap : MonoBehaviour {
                         all_rigidbodies = FindObjectsOfType<Rigidbody>();
                         foreach (SphereCollider sphere_collider in all_spheres)
                         {
-                            Destroy(sphere_collider);
+                            sphere_collider.enabled = false;
                         }
-                        foreach (Rigidbody rigid_body in all_rigidbodies)
+                        foreach (Rigidbody rigidbody in all_rigidbodies)
                         {
-                            Destroy(rigid_body);
+                            Destroy(rigidbody);
                         }
                     }
                     if (!first)
@@ -106,7 +113,7 @@ public class GenMap : MonoBehaviour {
                                 }
                                 infos_blocks.Colonise = true;
                                 blocks[j].GetComponent<MeshRenderer>().material = cubes[i].GetComponent<InfosCase>().nature;
-                                yield return new WaitForSeconds(0.1f);
+                                yield return new WaitForSeconds(0.5f);
                             }
                             avg += infos_blocks.Percent;
                         }
