@@ -7,6 +7,11 @@ using System;
 
 public class CanvasManager : MonoBehaviour {
 
+	[HideInInspector]
+	public Item selectedItem = null;
+
+	public GameObject [] itemPrefabs;
+
 	[SerializeField]
 	private GameObject infoBox;
 	[SerializeField]
@@ -20,11 +25,10 @@ public class CanvasManager : MonoBehaviour {
 	private GameObject[] itemButtons;
 
 	private Dictionary<string, Item> inventory = new Dictionary<string, Item>();
-	private Item selectedItem = null;
 	private float timeElapsed = 0;
 
 	[HideInInspector]
-	public bool bIsPlaying;
+	public static bool bIsPlaying;
 
 	// Use this for initialization
 	void Start () 
@@ -32,10 +36,10 @@ public class CanvasManager : MonoBehaviour {
 		ShowHUD(false);
 
 		// Initialise les objets
-		inventory.Add("Seeds", new Item(5, 10));
-		inventory.Add ("Rain", new Item(1, 30));
-		inventory.Add ("Wind", new Item(0, 60));
-		inventory.Add ("Cyclone", new Item(0, 90));
+		inventory.Add("Seeds", new Item(10, 85, 2, itemPrefabs[0]));
+		inventory.Add ("Rain", new Item(5, 30, 10, itemPrefabs[0]));
+		inventory.Add ("Wind", new Item(3, 60, 5, itemPrefabs[0]));
+		inventory.Add ("Cyclone", new Item(1, 90, 5, itemPrefabs[0]));
 		bIsPlaying = false;
 		UpdateInventory();
 	}
@@ -60,6 +64,15 @@ public class CanvasManager : MonoBehaviour {
 	{
 		yield return new WaitForSeconds(itemDelay);
 		inventory[itemIndex].Quantity++;
+		UpdateInventory();
+	}
+
+	public void UseItem()
+	{
+		if (selectedItem != null)
+		{
+			selectedItem.Quantity -= 1;
+		}
 		UpdateInventory();
 	}
 
@@ -101,14 +114,17 @@ public class CanvasManager : MonoBehaviour {
 		{
 			CancelInvoke();
 		}
-		if (selectedItem != null)
-		Debug.Log(selectedItem.Influence);
 	}
 
-	public void UpdateInfoBox(int naturePercent)
+	public void UpdateInfoBox(int naturePercent, int bonus)
 	{
 		int humanPercent = 100 - naturePercent;
-		infoBox.GetComponent<Text>().text = "Human dominance : " + humanPercent + "%\n\n" + "Nature dominance : " + naturePercent + "%";
+		string toDisp = "Human dominance : " + humanPercent + "%\n\n" + "Nature dominance : " + naturePercent + "%";
+		if (bonus != 0)
+		{
+			toDisp += "\n\nCurrent bonus : " + bonus + "%";
+		}
+		infoBox.GetComponent<Text>().text = toDisp;
 	}
 
 	public void UpdateInfoBox()
@@ -116,10 +132,12 @@ public class CanvasManager : MonoBehaviour {
 		infoBox.GetComponent<Text>().text = "";
 	}
 
-	class Item
+	public class Item
 	{
 		int quantity;
 		int influence;
+		float duration;
+		GameObject itemPrefab;
 
 		public int Quantity
 		{
@@ -133,10 +151,23 @@ public class CanvasManager : MonoBehaviour {
 			set { influence = (value >= 0 && value <= 100) ? value : 0; }
 		}
 
-		public Item(int _quantity, int _influence)
+		public float Duration
+		{
+			get { return duration; }
+			set { duration = value; influence = (value > 0) ? influence : 0; }
+		}
+
+		public GameObject ItemPrefab
+		{
+			get { return itemPrefab; }
+		}
+
+		public Item(int _quantity, int _influence, int _duration, GameObject _itemPrefab)
 		{
 			quantity = _quantity;
 			influence = _influence;
+			duration = _duration;
+			itemPrefab = _itemPrefab;
 		}
 	}
 }
