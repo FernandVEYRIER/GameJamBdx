@@ -88,8 +88,7 @@ public class ModelQuad : MonoBehaviour {
 
         for (int i = 0; i < total_size; i++)
         {
-            Transform[] blocks = GameObject.Find(quads[i].ID.ToString()).GetComponent<InfosCase>().Blocks.ToArray();
-            print(blocks.Length);
+            print(GameObject.Find(quads[i].ID.ToString()));
         }
         //this.enabled = false;
     }
