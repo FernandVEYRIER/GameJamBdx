@@ -141,7 +141,7 @@ public class GenMap : MonoBehaviour {
 					blockInfo.GetComponent<MeshRenderer>().material = blockInfo.human;
 				}
 			}
-			yield return new WaitForSeconds(2);
+			yield return new WaitForSeconds(2f);
 		}
 	}
 

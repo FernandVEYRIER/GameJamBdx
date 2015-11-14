@@ -50,10 +50,12 @@ public class Selector : MonoBehaviour {
         {
 			if (canvas.selectedItem != null && Input.GetMouseButtonDown(0))
 			{
-				GameObject go = (GameObject) Instantiate(canvas.selectedItem.ItemPrefab, hit.transform.position + 5 * hit.normal, hit.transform.rotation);
-				go.transform.SetParent(hit.transform);
-				hit.transform.GetComponent<InfosCase>().SetBonus(canvas.selectedItem);
-				canvas.UseItem();
+				if (canvas.UseItem())
+				{
+					GameObject go = (GameObject) Instantiate(canvas.selectedItem.ItemPrefab, hit.transform.position, hit.transform.rotation);
+					go.transform.SetParent(hit.transform);
+					hit.transform.GetComponent<InfosCase>().SetBonus(canvas.selectedItem);
+				}
 			}
 			canvas.UpdateInfoBox(hit.transform.GetComponent<InfosCase>().Percent, hit.transform.GetComponent<InfosCase>().Bonus);
         }

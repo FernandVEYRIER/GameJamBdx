@@ -36,10 +36,10 @@ public class CanvasManager : MonoBehaviour {
 		ShowHUD(false);
 
 		// Initialise les objets
-		inventory.Add("Seeds", new Item(10, 85, 2, itemPrefabs[0]));
-		inventory.Add ("Rain", new Item(5, 30, 10, itemPrefabs[0]));
-		inventory.Add ("Wind", new Item(3, 60, 5, itemPrefabs[0]));
-		inventory.Add ("Cyclone", new Item(1, 90, 5, itemPrefabs[0]));
+		inventory.Add("Seeds", new Item(10, 85, 20, itemPrefabs[0]));
+		inventory.Add ("Rain", new Item(5, 30, 15, itemPrefabs[1]));
+		inventory.Add ("Wind", new Item(3, 60, 10, itemPrefabs[0]));
+		inventory.Add ("Tornado", new Item(1, 90, 6, itemPrefabs[0]));
 		bIsPlaying = false;
 		UpdateInventory();
 	}
@@ -67,13 +67,24 @@ public class CanvasManager : MonoBehaviour {
 		UpdateInventory();
 	}
 
-	public void UseItem()
+	public bool UseItem()
 	{
+		bool bCouldUse = false;
+
 		if (selectedItem != null)
 		{
-			selectedItem.Quantity -= 1;
+			if (selectedItem.Quantity > 0)
+			{
+				selectedItem.Quantity -= 1;
+				bCouldUse = true;
+			}
+			else
+			{
+				selectedItem = null;
+			}
 		}
 		UpdateInventory();
+		return bCouldUse;
 	}
 
 	void UpdateInventory()

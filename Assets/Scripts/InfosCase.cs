@@ -11,7 +11,31 @@ public class InfosCase : MonoBehaviour {
     private int percent = 0;
     private List<Transform> conneted_block = new List<Transform>();
 
-	private List<CanvasManager.Item> activeItems = new List<CanvasManager.Item>();
+	private List<Item> activeItems = new List<Item>();
+
+	class Item
+	{
+		float duration;
+		int influence;
+
+		public float Duration
+		{
+			get { return duration; }
+			set { duration = value; }
+		}
+
+		public int Influence
+		{
+			get { return influence; }
+			set { influence = value; }
+		}
+
+		public Item(float _duration, int _influence)
+		{
+			duration = _duration;
+			influence = _influence;
+		}
+	}
 
 	// Bonus appliqué à la case
 	private int bonus = 0;
@@ -49,7 +73,7 @@ public class InfosCase : MonoBehaviour {
 
 	public void SetBonus(CanvasManager.Item value)
 	{
-		activeItems.Add (value);
+		activeItems.Add (new Item(value.Duration, value.Influence));
 		bonus += value.Influence;
 	}
 
@@ -60,15 +84,15 @@ public class InfosCase : MonoBehaviour {
 		{
 			// On fait diminuer le temps d'action de l'item
 			activeItems[i].Duration -= Time.deltaTime;
-			Debug.Log(activeItems[i].Duration);
 			// S'il n'a plus d'influence on le vire
-			if (activeItems[i].Influence <= 0)
+			if (activeItems[i].Duration <= 0)
 			{
 				// Et on remove le prefab associé au buff
 				if (this.transform.childCount != 0)
 				{
 					Destroy(this.transform.GetChild(0).gameObject);
 				}
+				bonus -= activeItems[i].Influence;
 				activeItems.RemoveAt(i);
 			}
 		}
