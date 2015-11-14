@@ -3,7 +3,7 @@ using System.Collections;
 
 public class TerrainHandler : MonoBehaviour {
 	
-	[SerializeField]
+    //[SerializeField]
 	private float rotationVel = 50f;
 
 	private Vector3 currentMousePosition;

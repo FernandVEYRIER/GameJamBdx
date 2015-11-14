@@ -11,6 +11,7 @@ public class rotate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //transform.RotateAround(Vector3.zero, new Vector3(Input.GetAxis("Vertical"), Input.GetAxis("Horizontal")), 1f);
-        transform.RotateAround(Vector3.zero, new Vector3(Random.Range(0, 0.1f), Random.Range(0, 0.1f)), 1f);
+        if (Input.GetMouseButton(1))
+            transform.RotateAround(Vector3.zero, new Vector3(Input.GetAxis("Mouse Y"), -Input.GetAxis("Mouse X"), 0), 1f);
 	}
 }
