@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Selector : MonoBehaviour {
 
+	[SerializeField]
+	private CanvasManager canvas;
+
     private bool status = false;
     public bool Status
     {
@@ -43,8 +46,13 @@ public class Selector : MonoBehaviour {
         }
         else if (res)
         {
-            print(hit.transform.GetComponent<InfosCase>().Percent);
+            //print(hit.transform.GetComponent<InfosCase>().Percent);
+			canvas.UpdateInfoBox(hit.transform.GetComponent<InfosCase>().Percent);
         }
+		else if (!res)
+		{
+			canvas.UpdateInfoBox();
+		}
     }
 
     private void changeStatus() {
