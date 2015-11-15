@@ -2,14 +2,14 @@
 using System.Collections;
 using UnityEditor;
 
-[CustomEditor(typeof(ModelQuad))]
+[CustomEditor(typeof(GenMap))]
 public class TerrainEditor : Editor {
 
 	public override void OnInspectorGUI()
 	{
 		DrawDefaultInspector();
 		
-		ModelQuad myScript = (ModelQuad)target;
+		GenMap myScript = (GenMap)target;
 		if(GUILayout.Button("Build Object"))
 		{
 			myScript.Build();

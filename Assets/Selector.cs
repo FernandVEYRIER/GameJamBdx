@@ -56,8 +56,6 @@ public class Selector : MonoBehaviour {
 			{
 				if (canvas.UseItem())
 				{
-					GameObject go = (GameObject) Instantiate(canvas.selectedItem.ItemPrefab, hit.transform.position, hit.transform.rotation);
-					go.transform.SetParent(hit.transform);
 					hit.transform.GetComponent<InfosCase>().SetBonus(canvas.selectedItem);
 				}
 			}

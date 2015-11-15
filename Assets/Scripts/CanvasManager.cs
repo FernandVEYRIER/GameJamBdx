@@ -141,15 +141,6 @@ public class CanvasManager : MonoBehaviour {
 		{
 			CancelInvoke();
 		}
-
-		LibNoise.Unity.Generator.Perlin pl = new LibNoise.Unity.Generator.Perlin();
-		pl.Lacunarity = 1;
-		pl.OctaveCount = 2;
-		pl.Persistence = 1.96f;
-		pl.Seed = 1;
-		pl.Quality = LibNoise.Unity.QualityMode.High;
-		pl.Frequency = 1 / 40.0f;
-		Debug.Log (pl.GetValue(Input.mousePosition));
 	}
 
 	public void UpdateInfoBox(int naturePercent, int bonus)

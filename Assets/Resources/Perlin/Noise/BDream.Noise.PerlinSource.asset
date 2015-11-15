@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dced529d9f3f54df8930c90b287f3b50, type: 3}
   m_Name: BDream.Noise.PerlinSource
   m_EditorClassIdentifier: 
-  _period: 40
+  _period: 86
   _lacunarity: 1
   _quality: 2
   _octaveCount: 2

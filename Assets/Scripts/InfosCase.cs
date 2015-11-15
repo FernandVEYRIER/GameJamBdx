@@ -17,6 +17,13 @@ public class InfosCase : MonoBehaviour {
 	{
 		float duration;
 		int influence;
+		GameObject go;
+
+		public GameObject Go
+		{
+			get { return go; }
+			set { go = value; }
+		}
 
 		public float Duration
 		{
@@ -74,6 +81,8 @@ public class InfosCase : MonoBehaviour {
 	public void SetBonus(CanvasManager.Item value)
 	{
 		activeItems.Add (new Item(value.Duration, value.Influence));
+		activeItems[activeItems.Count - 1].Go = (GameObject) Instantiate(value.ItemPrefab, this.transform.position, this.transform.rotation);
+		activeItems[activeItems.Count - 1].Go.transform.SetParent(this.transform);
 		bonus += value.Influence;
 	}
 
@@ -88,10 +97,7 @@ public class InfosCase : MonoBehaviour {
 			if (activeItems[i].Duration <= 0)
 			{
 				// Et on remove le prefab associé au buff
-				if (this.transform.childCount != 0)
-				{
-					Destroy(this.transform.GetChild(0).gameObject);
-				}
+				Destroy (activeItems[i].Go);
 				bonus -= activeItems[i].Influence;
 				activeItems.RemoveAt(i);
 			}
