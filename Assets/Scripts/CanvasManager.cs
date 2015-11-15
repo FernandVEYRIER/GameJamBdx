@@ -6,7 +6,7 @@ using System.Linq;
 using System;
 using LibNoise;
 
-// TODO : menu pause, fin
+// TODO : fin, début case à 100%, volume slide bar
 
 public class CanvasManager : MonoBehaviour {
 
@@ -40,6 +40,9 @@ public class CanvasManager : MonoBehaviour {
 	[SerializeField]
 	private GameObject gauge;
 
+	[SerializeField]
+	private GameObject canvasPause;
+
 	private Dictionary<string, Item> inventory = new Dictionary<string, Item>();
 	private float timeElapsed = 0;
 
@@ -69,6 +72,7 @@ public class CanvasManager : MonoBehaviour {
 			beginBox.SetActive(true);
 		}
 		infoBox.SetActive(false);
+		canvasPause.SetActive(false);
 
 		// Initialise les objets
 		inventory.Add("Seeds", new Item(10, 15, 37, 8, itemPrefabs[0]));
@@ -79,10 +83,13 @@ public class CanvasManager : MonoBehaviour {
 		UpdateInventory();
 	}
 
-	public void ShowHUD(bool bIsDisplayed)
+	public void ShowHUD(bool bIsDisplayed, bool bIsStart = true)
 	{
 		HUD.SetActive(bIsDisplayed);
-		beginBox.SetActive(!bIsDisplayed);
+		if (bIsStart)
+		{
+			beginBox.SetActive(!bIsDisplayed);
+		}
 		infoBox.SetActive(bIsDisplayed);
 		UpdateInventory();
 	}
@@ -216,15 +223,28 @@ public class CanvasManager : MonoBehaviour {
 		PlayerPrefs.SetInt("Display", button.isOn ? 0 : 1);
 	}
 
+	public void Quit()
+	{
+#if UNITY_WEBPLAYER
+		Application.ExternalEval("window.close()");
+#elif UNITY_STANDALONE
+		Application.Quit();
+#endif
+	}
+
 	public void SetPause()
 	{
 		if (!bIsPaused)
 		{
 			bIsPaused = true;
+			canvasPause.SetActive(true);
+			ShowHUD(false, false);
 			Time.timeScale = 0;
 		}
 		else
 		{
+			canvasPause.SetActive(false);
+			ShowHUD(true, false);
 			bIsPaused = false;
 			Time.timeScale = 1;
 		}
