@@ -6,7 +6,7 @@ using System.Linq;
 using System;
 using LibNoise;
 
-// TODO : fin, début case à 100%, volume slide bar
+// TODO : fin
 
 public class CanvasManager : MonoBehaviour {
 
@@ -46,6 +46,9 @@ public class CanvasManager : MonoBehaviour {
 	[SerializeField]
 	private GameObject volumeSlider;
 
+	[SerializeField]
+	private GameObject canvasGameOver;
+
 	private Dictionary<string, Item> inventory = new Dictionary<string, Item>();
 	private float timeElapsed = 0;
 
@@ -76,6 +79,7 @@ public class CanvasManager : MonoBehaviour {
 		}
 		infoBox.SetActive(false);
 		canvasPause.SetActive(false);
+		canvasGameOver.SetActive(false);
 
 		volumeSlider.GetComponent<Slider>().value = Camera.main.GetComponent<AudioSource>().volume;
 
@@ -200,6 +204,15 @@ public class CanvasManager : MonoBehaviour {
 			timeElapsed += Time.deltaTime;
 
 			gauge.GetComponent<Image>().fillAmount = occupationAmount;
+
+			if (occupationAmount <= 0)
+			{
+				GameOver(false);
+			}
+			else if (occupationAmount >= 100)
+			{
+				GameOver(true);
+			}
 		}
 		else
 		{
@@ -226,6 +239,21 @@ public class CanvasManager : MonoBehaviour {
 	public void SetIntroBox(Toggle button)
 	{
 		PlayerPrefs.SetInt("Display", button.isOn ? 0 : 1);
+	}
+
+	public void GameOver(bool bHasWon)
+	{
+		ShowHUD(false, false);
+		canvasGameOver.SetActive(true);
+		if (bHasWon)
+		{
+			canvasGameOver.transform.GetChild(1).GetComponent<Text>().text = "Congratulations ! You managed to take back all the land you deserved, and won against human kind.\n\n Thanks for playing !";
+		}
+		else
+		{
+			canvasGameOver.transform.GetChild(1).GetComponent<Text>().text = "Sadly, humanity completely erased you from the map.\n\nThanks for playing !";
+		}
+		bIsPaused = true;
 	}
 
 	public void Quit()

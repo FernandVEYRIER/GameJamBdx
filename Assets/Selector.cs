@@ -47,6 +47,7 @@ public class Selector : MonoBehaviour {
 			{
 	            GenMap map = GameObject.FindGameObjectWithTag("Map").GetComponent<GenMap>();
 	            hit.transform.GetComponent<InfosCase>().Colonise = true;
+				hit.transform.GetComponent<InfosCase>().Percent = 100;
 	            map.First = false;
 	//            map.SetSidesQuad();
 				map.makeCoffee();
