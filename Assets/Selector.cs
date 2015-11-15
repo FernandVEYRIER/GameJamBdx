@@ -38,14 +38,17 @@ public class Selector : MonoBehaviour {
         }
         else if (res && Input.GetMouseButtonDown(0) && GameObject.FindGameObjectWithTag("Map").GetComponent<GenMap>().First)
         {
-            GenMap map = GameObject.FindGameObjectWithTag("Map").GetComponent<GenMap>();
-            hit.transform.GetComponent<InfosCase>().Colonise = true;
-            map.First = false;
-//            map.SetSidesQuad();
-			map.makeCoffee();
-			canvas.ShowHUD(true);
-			CanvasManager.bIsPlaying = true;
-			canvas.StartItemGeneration();
+			if (canvas.beginBox.activeSelf)
+			{
+	            GenMap map = GameObject.FindGameObjectWithTag("Map").GetComponent<GenMap>();
+	            hit.transform.GetComponent<InfosCase>().Colonise = true;
+	            map.First = false;
+	//            map.SetSidesQuad();
+				map.makeCoffee();
+				canvas.ShowHUD(true);
+				CanvasManager.bIsPlaying = true;
+				canvas.StartItemGeneration();
+			}
         }
         else if (res)
         {

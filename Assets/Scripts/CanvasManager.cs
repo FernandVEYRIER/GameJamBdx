@@ -15,8 +15,9 @@ public class CanvasManager : MonoBehaviour {
 
 	[SerializeField]
 	private GameObject infoBox;
-	[SerializeField]
-	private GameObject beginBox;
+
+	public GameObject beginBox;
+
 	[SerializeField]
 	private GameObject HUD;
 	[SerializeField]
@@ -34,7 +35,9 @@ public class CanvasManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		ShowHUD(false);
+		HUD.SetActive(false);
+		beginBox.SetActive(false);
+		infoBox.SetActive(false);
 
 		// Initialise les objets
 		inventory.Add("Seeds", new Item(10, 15, 37, itemPrefabs[0]));
