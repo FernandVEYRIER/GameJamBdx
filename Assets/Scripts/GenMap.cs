@@ -47,10 +47,25 @@ public class GenMap : MonoBehaviour {
 
 				if (terrainProps.Length > 0)
 				{
-					int yolo = (terrainProps.Length - 1) * Mathf.RoundToInt(tmp.GetComponent<InfosCase>().Percent / 100f);
-					GameObject go = (GameObject) Instantiate(terrainProps[yolo], tmp.transform.position, Quaternion.Euler(tmp.transform.right));
+					GameObject go = (GameObject) Instantiate(terrainProps[0], tmp.transform.position, Quaternion.Euler(tmp.transform.right));
 					go.transform.parent = tmp.transform;
+					if (tmp.GetComponent<InfosCase>().Percent >= 50)
+					{
+						go.GetComponentInChildren<MeshRenderer>().enabled = false;
+					}
+					else
+					{
+						go.GetComponentInChildren<MeshRenderer>().enabled = true;
+					}
 				}
+
+                
+//                if (terrainProps.Length > 0)
+//				{
+//					int yolo = (terrainProps.Length - 1) * Mathf.RoundToInt(tmp.GetComponent<InfosCase>().Percent / 100f);
+//					GameObject go = (GameObject) Instantiate(terrainProps[yolo], tmp.transform.position, Quaternion.Euler(tmp.transform.right));
+//					go.transform.parent = tmp.transform;
+//				}
             }
         }
         return obj;
@@ -165,10 +180,12 @@ public class GenMap : MonoBehaviour {
 				if (blockInfo.Percent > 50)
 				{
 					blockInfo.GetComponent<MeshRenderer>().material = blockInfo.nature;
+					blockInfo.transform.GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
 				}
 				else
 				{
 					blockInfo.GetComponent<MeshRenderer>().material = blockInfo.human;
+					blockInfo.transform.GetChild (0).GetComponentInChildren<MeshRenderer>().enabled = true;
 				}
 			}
 			yield return new WaitForSeconds(2f);

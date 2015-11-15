@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b5c42cf4a552f4faa1ad95dbe424fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nature: {fileID: 2100000, guid: 05b54c820be831842b0ba8cf3287c7f0, type: 2}
+  nature: {fileID: 2100000, guid: e15ba96593903d746b8ccc9e7d8d62f4, type: 2}
   human: {fileID: 2100000, guid: 372b6c3af19d06d4a97bc7698b6e442e, type: 2}
 --- !u!135 &13526980
 SphereCollider:
@@ -126,7 +126,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: nature
       value: 
-      objectReference: {fileID: 2100000, guid: 05b54c820be831842b0ba8cf3287c7f0, type: 2}
+      objectReference: {fileID: 2100000, guid: e15ba96593903d746b8ccc9e7d8d62f4, type: 2}
     - target: {fileID: 0}
       propertyPath: human
       value: 
