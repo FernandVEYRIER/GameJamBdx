@@ -65,8 +65,8 @@ public class GenMap : MonoBehaviour {
 					{
 						go.GetComponentInChildren<MeshRenderer>().enabled = false;
 
-						go.GetComponentInChildren<MeshRenderer>().material = prefabProps[0].material;
-						go.GetComponentInChildren<MeshFilter>().mesh = prefabProps[0].mesh;
+//						go.GetComponentInChildren<MeshRenderer>().material = prefabProps[0].material;
+//						go.GetComponentInChildren<MeshFilter>().mesh = prefabProps[0].mesh;
 					}
 					else
 					{
