@@ -205,7 +205,7 @@ public class CanvasManager : MonoBehaviour {
 
 			gauge.GetComponent<Image>().fillAmount = occupationAmount;
 
-			if (Time.timeSinceLevelLoad > 10)
+			if (Time.timeSinceLevelLoad > 200)
 			{
 				if (occupationAmount <= 0)
 				{
