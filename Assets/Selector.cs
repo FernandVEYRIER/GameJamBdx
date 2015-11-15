@@ -42,6 +42,7 @@ public class Selector : MonoBehaviour {
             hit.transform.GetComponent<InfosCase>().Colonise = true;
             map.First = false;
 //            map.SetSidesQuad();
+			map.makeCoffee();
 			canvas.ShowHUD(true);
 			CanvasManager.bIsPlaying = true;
 			canvas.StartItemGeneration();

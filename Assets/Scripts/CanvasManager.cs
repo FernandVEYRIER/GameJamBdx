@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using LibNoise;
 
 public class CanvasManager : MonoBehaviour {
 
@@ -36,10 +37,10 @@ public class CanvasManager : MonoBehaviour {
 		ShowHUD(false);
 
 		// Initialise les objets
-		inventory.Add("Seeds", new Item(10, 15, 20, itemPrefabs[0]));
-		inventory.Add ("Rain", new Item(5, 30, 15, itemPrefabs[1]));
-		inventory.Add ("Wind", new Item(3, 60, 10, itemPrefabs[2]));
-		inventory.Add ("Tornado", new Item(100, 90, 6, itemPrefabs[3]));
+		inventory.Add("Seeds", new Item(10, 15, 37, itemPrefabs[0]));
+		inventory.Add ("Rain", new Item(5, 30, 25, itemPrefabs[1]));
+		inventory.Add ("Wind", new Item(3, 60, 18, itemPrefabs[2]));
+		inventory.Add ("Tornado", new Item(1, 90, 10, itemPrefabs[3]));
 		bIsPlaying = false;
 		UpdateInventory();
 	}
@@ -125,6 +126,16 @@ public class CanvasManager : MonoBehaviour {
 		{
 			CancelInvoke();
 		}
+
+
+		LibNoise.Unity.Generator.Perlin pl = new LibNoise.Unity.Generator.Perlin();
+		pl.Lacunarity = 1;
+		pl.OctaveCount = 2;
+		pl.Persistence = 1.96f;
+		pl.Seed = 1;
+		pl.Quality = LibNoise.Unity.QualityMode.High;
+		pl.Frequency = 40;
+		Debug.Log (pl.GetValue(Input.mousePosition));
 	}
 
 	public void UpdateInfoBox(int naturePercent, int bonus)
