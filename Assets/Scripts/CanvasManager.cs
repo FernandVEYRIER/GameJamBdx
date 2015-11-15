@@ -16,6 +16,9 @@ public class CanvasManager : MonoBehaviour {
 	[SerializeField]
 	private GameObject infoBox;
 
+	[SerializeField]
+	private GameObject greetingBox;
+
 	public GameObject beginBox;
 
 	[SerializeField]
@@ -36,7 +39,16 @@ public class CanvasManager : MonoBehaviour {
 	void Start () 
 	{
 		HUD.SetActive(false);
-		beginBox.SetActive(false);
+		if (PlayerPrefs.GetInt("Display", 1) == 1)
+		{
+			greetingBox.SetActive(true);
+			beginBox.SetActive(false);
+		}
+		else
+		{
+			greetingBox.SetActive(false);
+			beginBox.SetActive(true);
+		}
 		infoBox.SetActive(false);
 
 		// Initialise les objets
@@ -130,14 +142,13 @@ public class CanvasManager : MonoBehaviour {
 			CancelInvoke();
 		}
 
-
 		LibNoise.Unity.Generator.Perlin pl = new LibNoise.Unity.Generator.Perlin();
 		pl.Lacunarity = 1;
 		pl.OctaveCount = 2;
 		pl.Persistence = 1.96f;
 		pl.Seed = 1;
 		pl.Quality = LibNoise.Unity.QualityMode.High;
-		pl.Frequency = 40;
+		pl.Frequency = 1 / 40.0f;
 		Debug.Log (pl.GetValue(Input.mousePosition));
 	}
 
@@ -155,6 +166,11 @@ public class CanvasManager : MonoBehaviour {
 	public void UpdateInfoBox()
 	{
 		infoBox.GetComponent<Text>().text = "";
+	}
+
+	public void SetIntroBox(Toggle button)
+	{
+		PlayerPrefs.SetInt("Display", button.isOn ? 0 : 1);
 	}
 
 	public class Item

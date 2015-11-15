@@ -361,18 +361,6 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 129
       objectReference: {fileID: 0}
-    - target: {fileID: 11475400, guid: 33e1c51ae6e0c8b4bb370d8d9d077b91, type: 2}
-      propertyPath: m_Text
-      value: 'Hello there ! The goal of this game is to control the biggest part of
-        the stage you can. You should help mother nature to expand by using items
-        to improve it''s progression through the city dominated by humain being. Good
-        luck !
-
-
-        Game made by Nicolas Constanty and Fernand Veyrier
-
-        Music by Enrique Pons Del Rey'
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 33e1c51ae6e0c8b4bb370d8d9d077b91, type: 2}
   m_IsPrefabParent: 0
