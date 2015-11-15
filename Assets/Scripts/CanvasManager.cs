@@ -43,6 +43,9 @@ public class CanvasManager : MonoBehaviour {
 	[SerializeField]
 	private GameObject canvasPause;
 
+	[SerializeField]
+	private GameObject volumeSlider;
+
 	private Dictionary<string, Item> inventory = new Dictionary<string, Item>();
 	private float timeElapsed = 0;
 
@@ -73,6 +76,8 @@ public class CanvasManager : MonoBehaviour {
 		}
 		infoBox.SetActive(false);
 		canvasPause.SetActive(false);
+
+		volumeSlider.GetComponent<Slider>().value = Camera.main.GetComponent<AudioSource>().volume;
 
 		// Initialise les objets
 		inventory.Add("Seeds", new Item(10, 15, 37, 8, itemPrefabs[0]));
