@@ -14,6 +14,9 @@ public class CanvasManager : MonoBehaviour {
 	public GameObject [] itemPrefabs;
 
 	[SerializeField]
+	private GameObject canvasCredit;
+
+	[SerializeField]
 	private GameObject infoBox;
 
 	[SerializeField]
@@ -35,6 +38,8 @@ public class CanvasManager : MonoBehaviour {
 	[HideInInspector]
 	public static bool bIsPlaying;
 
+	public int credits = 0;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -52,10 +57,10 @@ public class CanvasManager : MonoBehaviour {
 		infoBox.SetActive(false);
 
 		// Initialise les objets
-		inventory.Add("Seeds", new Item(10, 15, 37, itemPrefabs[0]));
-		inventory.Add ("Rain", new Item(5, 30, 25, itemPrefabs[1]));
-		inventory.Add ("Wind", new Item(3, 60, 18, itemPrefabs[2]));
-		inventory.Add ("Tornado", new Item(1, 90, 10, itemPrefabs[3]));
+		inventory.Add("Seeds", new Item(10, 15, 37, 8, itemPrefabs[0]));
+		inventory.Add ("Rain", new Item(5, 30, 25, 15, itemPrefabs[1]));
+		inventory.Add ("Wind", new Item(3, 60, 18, 25,itemPrefabs[2]));
+		inventory.Add ("Tornado", new Item(1, 90, 10, 50, itemPrefabs[3]));
 		bIsPlaying = false;
 		UpdateInventory();
 	}
@@ -103,6 +108,22 @@ public class CanvasManager : MonoBehaviour {
 		return bCouldUse;
 	}
 
+	public void BuyItem(int itemIndex)
+	{
+		if (credits >= inventory[inventory.Keys.ElementAt(itemIndex)].Price)
+		{
+			credits -= inventory[inventory.Keys.ElementAt(itemIndex)].Price;
+			inventory[inventory.Keys.ElementAt(itemIndex)].Quantity++;
+		}
+		UpdateInventory();
+	}
+
+	public void AddCredits(int ammount)
+	{
+		credits += ammount;
+		UpdateInventory();
+	}
+
 	void UpdateInventory()
 	{
 		// Pour chaque item
@@ -114,6 +135,8 @@ public class CanvasManager : MonoBehaviour {
 				itemButtons[i].GetComponentInChildren<Text>().text = inventory.Keys.ElementAt(i) + " (x" + inventory[inventory.Keys.ElementAt(i)].Quantity + ")";
 			}
 		}
+		// On met à jour les crédits
+		canvasCredit.GetComponent<Text>().text = "Credits : " + credits;
 	}
 
 	public void SelectItem(int itemIndex)
@@ -169,6 +192,7 @@ public class CanvasManager : MonoBehaviour {
 		int quantity;
 		int influence;
 		float duration;
+		int price;
 		GameObject itemPrefab;
 
 		public int Quantity
@@ -189,16 +213,23 @@ public class CanvasManager : MonoBehaviour {
 			set { duration = value; influence = (value > 0) ? influence : 0; }
 		}
 
+		public int Price
+		{
+			get { return price; }
+			set { price = value; }
+		}
+
 		public GameObject ItemPrefab
 		{
 			get { return itemPrefab; }
 		}
 
-		public Item(int _quantity, int _influence, int _duration, GameObject _itemPrefab)
+		public Item(int _quantity, int _influence, int _duration, int _price, GameObject _itemPrefab)
 		{
 			quantity = _quantity;
 			influence = _influence;
 			duration = _duration;
+			price = _price;
 			itemPrefab = _itemPrefab;
 		}
 	}

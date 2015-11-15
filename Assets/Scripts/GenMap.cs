@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class GenMap : MonoBehaviour {
 
+	public CanvasManager canvas;
+
 	public GameObject [] terrainProps;
 
     public uint size;
@@ -151,10 +153,12 @@ public class GenMap : MonoBehaviour {
 		while (CanvasManager.bIsPlaying)
 		{
 			int avg = 50;
+			int previousPercent = 0;
 			// Pour chaque case
 			for (int i = 0; i < size; i++)
 			{
 				InfosCase blockInfo = cubes[i].GetComponent<InfosCase>();
+				previousPercent = blockInfo.Percent;
 				avg = 0;
 				// On fait la moyenne des cases voisines
 				foreach (Transform tr in blockInfo.Blocks)
@@ -176,9 +180,13 @@ public class GenMap : MonoBehaviour {
 				// On reste entre 0 et 100
 				blockInfo.Percent = Mathf.Clamp(blockInfo.Percent, 0, 100);
 
-				// Eton met à jour les textures
+				// Et on met à jour les textures
 				if (blockInfo.Percent > 50)
 				{
+					if (previousPercent <= 50)
+					{
+						canvas.AddCredits(10);
+                    }
 					blockInfo.GetComponent<MeshRenderer>().material = blockInfo.nature;
 					blockInfo.transform.GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
 				}
