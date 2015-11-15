@@ -6,6 +6,8 @@ using System.Linq;
 using System;
 using LibNoise;
 
+// TODO : menu pause, fin
+
 public class CanvasManager : MonoBehaviour {
 
 	[HideInInspector]
@@ -32,13 +34,25 @@ public class CanvasManager : MonoBehaviour {
 	[SerializeField]
 	private GameObject[] itemButtons;
 
+	[SerializeField]
+	private GameObject[] itemBuyButtons;
+
+	[SerializeField]
+	private GameObject gauge;
+
 	private Dictionary<string, Item> inventory = new Dictionary<string, Item>();
 	private float timeElapsed = 0;
 
 	[HideInInspector]
 	public static bool bIsPlaying;
 
+	[HideInInspector]
+	public float occupationAmount = 0;
+
 	public int credits = 0;
+
+	[HideInInspector]
+	public static bool bIsPaused = false;
 
 	// Use this for initialization
 	void Start () 
@@ -77,15 +91,18 @@ public class CanvasManager : MonoBehaviour {
 	{
 		for (int i = 0; i < inventory.Count; i++)
 		{
-			StartCoroutine( GetItem(inventory.Keys.ElementAt(i), inventory[inventory.Keys.ElementAt(i)].Influence) 	);
+			StartCoroutine( GetItem(inventory.Keys.ElementAt(i), inventory[inventory.Keys.ElementAt(i)].Influence / 3) );
 		}
 	}
 
 	IEnumerator GetItem(string itemIndex, int itemDelay)
 	{
-		yield return new WaitForSeconds(itemDelay);
-		inventory[itemIndex].Quantity++;
-		UpdateInventory();
+		while (bIsPlaying)
+		{
+			yield return new WaitForSeconds(itemDelay);
+			inventory[itemIndex].Quantity++;
+			UpdateInventory();
+		}
 	}
 
 	public bool UseItem()
@@ -134,6 +151,10 @@ public class CanvasManager : MonoBehaviour {
 			{
 				itemButtons[i].GetComponentInChildren<Text>().text = inventory.Keys.ElementAt(i) + " (x" + inventory[inventory.Keys.ElementAt(i)].Quantity + ")";
 			}
+			if (i < itemBuyButtons.Length)
+			{
+				itemBuyButtons[i].GetComponentInChildren<Text>().text = "Buy\n(" + inventory[inventory.Keys.ElementAt(i)].Price + ")";
+			}
 		}
 		// On met à jour les crédits
 		canvasCredit.GetComponent<Text>().text = "Credits : " + credits;
@@ -143,7 +164,13 @@ public class CanvasManager : MonoBehaviour {
 	{
 		if (itemIndex < inventory.Count && inventory[inventory.Keys.ElementAt(itemIndex)].Quantity > 0)
 		{
+			for (int i = 0; i < itemButtons.Length; i++)
+			{
+				Image curCol = itemButtons[i].GetComponent<Image>();
+				curCol.color = new Color(1, 1, 1, 1);
+			}
 			selectedItem = inventory[inventory.Keys.ElementAt(itemIndex)];
+			itemButtons[itemIndex].GetComponent<Image>().color = new Color(0, 0.6f, 0, 1);
 		}
 		else
 		{
@@ -159,6 +186,8 @@ public class CanvasManager : MonoBehaviour {
 			TimeSpan timeDisp = TimeSpan.FromSeconds(timeElapsed);
 			timer.GetComponent<Text>().text = timeDisp.ToString().Substring(0, timeDisp.ToString().Length - 8);
 			timeElapsed += Time.deltaTime;
+
+			gauge.GetComponent<Image>().fillAmount = occupationAmount;
 		}
 		else
 		{
@@ -185,6 +214,20 @@ public class CanvasManager : MonoBehaviour {
 	public void SetIntroBox(Toggle button)
 	{
 		PlayerPrefs.SetInt("Display", button.isOn ? 0 : 1);
+	}
+
+	public void SetPause()
+	{
+		if (!bIsPaused)
+		{
+			bIsPaused = true;
+			Time.timeScale = 0;
+		}
+		else
+		{
+			bIsPaused = false;
+			Time.timeScale = 1;
+		}
 	}
 
 	public class Item

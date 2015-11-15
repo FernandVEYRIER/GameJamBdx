@@ -154,6 +154,7 @@ public class GenMap : MonoBehaviour {
 		{
 			int avg = 50;
 			int previousPercent = 0;
+			float natureOccupation = 0;
 			// Pour chaque case
 			for (int i = 0; i < size; i++)
 			{
@@ -185,8 +186,9 @@ public class GenMap : MonoBehaviour {
 				{
 					if (previousPercent <= 50)
 					{
-						canvas.AddCredits(10);
+						canvas.AddCredits(30);
                     }
+					natureOccupation += 1;
 					blockInfo.GetComponent<MeshRenderer>().material = blockInfo.nature;
 					blockInfo.transform.GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
 				}
@@ -196,7 +198,9 @@ public class GenMap : MonoBehaviour {
 					blockInfo.transform.GetChild (0).GetComponentInChildren<MeshRenderer>().enabled = true;
 				}
 			}
-			yield return new WaitForSeconds(2f);
+			natureOccupation /= (float)size;
+			canvas.occupationAmount = natureOccupation;
+			yield return new WaitForSeconds(1f);
 		}
 	}
 

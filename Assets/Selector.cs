@@ -26,6 +26,11 @@ public class Selector : MonoBehaviour {
     }
 
     void Update() {
+		if (CanvasManager.bIsPaused)
+		{
+			return;
+		}
+
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         

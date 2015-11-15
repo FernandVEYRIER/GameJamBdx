@@ -154,6 +154,11 @@ public class InfosCase : MonoBehaviour {
         }
 	}
     void OnMouseOver() {
+		if (CanvasManager.bIsPaused)
+		{
+			return;
+		}
+
         GameObject selector = GameObject.FindGameObjectWithTag("Selector");
         selector.transform.position = transform.position;
         selector.transform.rotation = transform.rotation;
