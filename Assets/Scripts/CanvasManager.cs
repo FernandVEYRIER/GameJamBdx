@@ -56,7 +56,7 @@ public class CanvasManager : MonoBehaviour {
 	public static bool bIsPlaying;
 
 	[HideInInspector]
-	public float occupationAmount = 0;
+	public float occupationAmount = 50;
 
 	public int credits = 0;
 
@@ -87,7 +87,7 @@ public class CanvasManager : MonoBehaviour {
 		inventory.Add("Seeds", new Item(10, 15, 37, 8, itemPrefabs[0]));
 		inventory.Add ("Rain", new Item(5, 30, 25, 15, itemPrefabs[1]));
 		inventory.Add ("Wind", new Item(3, 60, 18, 25,itemPrefabs[2]));
-		inventory.Add ("Tornado", new Item(1, 90, 10, 50, itemPrefabs[3]));
+		inventory.Add ("Tornado", new Item(1000000, 90, 10, 50, itemPrefabs[3]));
 		bIsPlaying = false;
 		UpdateInventory();
 	}
@@ -205,13 +205,16 @@ public class CanvasManager : MonoBehaviour {
 
 			gauge.GetComponent<Image>().fillAmount = occupationAmount;
 
-			if (occupationAmount <= 0)
+			if (Time.timeSinceLevelLoad > 10)
 			{
-				GameOver(false);
-			}
-			else if (occupationAmount >= 100)
-			{
-				GameOver(true);
+				if (occupationAmount <= 0)
+				{
+					GameOver(false);
+				}
+				else if (occupationAmount >= 1)
+				{
+					GameOver(true);
+				}
 			}
 		}
 		else
@@ -263,6 +266,11 @@ public class CanvasManager : MonoBehaviour {
 #elif UNITY_STANDALONE
 		Application.Quit();
 #endif
+	}
+
+	public void ReloadLevel()
+	{
+		Application.LoadLevel(Application.loadedLevel);
 	}
 
 	public void SetPause()
