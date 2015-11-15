@@ -1,12 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class GenMap : MonoBehaviour {
 
 	public CanvasManager canvas;
 
 	public GameObject [] terrainProps;
+
+	public PropPrefab [] prefabProps;
+
+	[Serializable]
+	public class PropPrefab
+	{
+		public Mesh mesh;
+		public Material material;
+	}
 
     public uint size;
     public GameObject plan;
@@ -54,6 +64,9 @@ public class GenMap : MonoBehaviour {
 					if (tmp.GetComponent<InfosCase>().Percent >= 50)
 					{
 						go.GetComponentInChildren<MeshRenderer>().enabled = false;
+
+						go.GetComponentInChildren<MeshRenderer>().material = prefabProps[0].material;
+						go.GetComponentInChildren<MeshFilter>().mesh = prefabProps[0].mesh;
 					}
 					else
 					{
