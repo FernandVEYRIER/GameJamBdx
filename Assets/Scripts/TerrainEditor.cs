@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+#if UNITY_EDITOR
 using UnityEditor;
 
 [CustomEditor(typeof(GenMap))]
@@ -21,3 +22,4 @@ public class TerrainEditor : Editor {
 		}
 	}
 }
+#endif
