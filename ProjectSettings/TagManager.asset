@@ -5,8 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Selector
-  - Case
   - Map
+  - Road
   layers:
   - Default
   - TransparentFX

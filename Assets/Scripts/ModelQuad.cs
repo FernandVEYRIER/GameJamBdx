@@ -11,8 +11,7 @@ public class ModelQuad : MonoBehaviour {
     private int size = 9;
     private int total_size = 486;
     private Quad[] quads = new Quad[486];
-    private Quad[] DupliQuads = new Quad[486];
-    private GameObject[] cubes = new GameObject[6];
+    //private GameObject[] cubes = new GameObject[6];
     private bool first;
     public bool First
     {

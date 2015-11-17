@@ -2,9 +2,6 @@
 using System.Collections;
 
 public class TerrainHandler : MonoBehaviour {
-	
-    //[SerializeField]
-	private float rotationVel = 50f;
 
 	private Vector3 currentMousePosition;
 

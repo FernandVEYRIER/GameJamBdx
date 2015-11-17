@@ -283,9 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e09a75af3dc8ed841b3512ac7ceac11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mats:
-  - {fileID: 2100000, guid: dcfa3553735932d41a685230bae06dcc, type: 2}
-  - {fileID: 2100000, guid: 5b8050b22cd39094787028b22b0ab8ae, type: 2}
+  canvas: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
