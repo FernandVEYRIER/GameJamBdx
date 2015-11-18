@@ -230,9 +230,9 @@ public class CanvasManager : MonoBehaviour {
 		}
 	}
 
-	public void UpdateInfoBox(int naturePercent, int bonus)
+	public void UpdateInfoBox(float naturePercent, int bonus)
 	{
-		int humanPercent = 100 - naturePercent;
+		float humanPercent = 100 - naturePercent;
 		string toDisp = "Human dominance : " + humanPercent + "%\n\n" + "Nature dominance : " + naturePercent + "%";
 		if (bonus != 0)
 		{

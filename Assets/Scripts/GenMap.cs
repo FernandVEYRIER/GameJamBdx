@@ -26,35 +26,24 @@ public class GenMap : MonoBehaviour {
     private SphereCollider[] all_spheres;
     private Rigidbody[] all_rigidbodies;
 
-	private Vector3 perlinNoiseRand = Vector3.zero;
-
-	private LibNoise.Unity.Generator.Perlin pl = new LibNoise.Unity.Generator.Perlin();
-	private float perlinRes = 0;
-	
-	private int [] statTab;
-
     public bool First
     {
         get { return first; }
         set { first = value; }
     }
 
-    void Awake()
-	{
-		float res = 0;
+    void Awake() {
+    }
 
+    private GameObject setFace(float unit) { 
+        
+		LibNoise.Unity.Generator.Perlin pl = new LibNoise.Unity.Generator.Perlin();
 		pl.Lacunarity = 1;
 		pl.OctaveCount = 2;
 		pl.Persistence = 1.96f;
 		pl.Seed = 1;
 		pl.Quality = LibNoise.Unity.QualityMode.High;
 		pl.Frequency = 1 / 80.0f;
-
-//		perlinNoiseRand = new Vector3(UnityEngine.Random.Range(0f, 10f), UnityEngine.Random.Range(0f, 10f), UnityEngine.Random.Range(0f, 10f));
-		perlinNoiseRand = Vector3.zero;
-    }
-
-    private GameObject setFace(float unit) {
 
         GameObject obj = new GameObject();
         for (uint j = 0; j < size; j++)
@@ -63,8 +52,7 @@ public class GenMap : MonoBehaviour {
             {
                 GameObject tmp = (GameObject)Instantiate(plan, new Vector3(unit * (1 + i) - (unit / 2) * size - (unit / 2), unit * (1 + j) - (unit / 2) * size - (unit / 2), (-unit / 2) * size), Quaternion.identity);
                 tmp.transform.parent = obj.transform;
-				tmp.GetComponent<InfosCase>().Percent = (int)(((pl.GetValue(tmp.transform.position + perlinNoiseRand) + 2f) / 3.0f ) * 100);
-				perlinRes += (float)pl.GetValue(tmp.transform.position + perlinNoiseRand);
+				tmp.GetComponent<InfosCase>().Percent = (int)(((pl.GetValue(tmp.transform.position) + 1.7f) / 3.0f ) * 100);
                 cubes.Add(tmp);
 
 				if (terrainProps.Length > 0)
@@ -95,7 +83,7 @@ public class GenMap : MonoBehaviour {
         }
         return obj;
     }
-
+	// Use this for initialization
 	void Start () {
 		Build();
 	}
@@ -128,8 +116,6 @@ public class GenMap : MonoBehaviour {
 		//            print(dupli_cubes[i].GetHashCode());
 		//            print(cubes[i].GetHashCode());
 		//        }
-
-		Debug.Log("Perlin average = " + perlinRes / size);
 	}
 
 	public void DestroyTerrain()
@@ -142,92 +128,91 @@ public class GenMap : MonoBehaviour {
 
     public void makeCoffee()
     {
-		statTab = new int[cubes.Count];
 		StartCoroutine("growOrDie");
     }
 
-	IEnumerator growOrDie()
-	{
-		for (int i = 0; i < size; i++)
-		{
-			List<Transform> blocks = cubes[i].GetComponent<InfosCase>().Blocks;
-			if (blocks.Count != 0)
-			{
-				if (cubes[i].GetComponent<SphereCollider>())
-				{
-					all_spheres = FindObjectsOfType<SphereCollider>();
-					all_rigidbodies = FindObjectsOfType<Rigidbody>();
-					foreach (SphereCollider sphere_collider in all_spheres)
-					{
-						sphere_collider.enabled = false;
-					}
-					foreach (Rigidbody rigidbody in all_rigidbodies)
-					{
-						Destroy(rigidbody);
-					}
-				}
-			}
-		}
+    //IEnumerator growOrDie()
+    //{
+    //    for (int i = 0; i < size; i++)
+    //    {
+    //        List<Transform> blocks = cubes[i].GetComponent<InfosCase>().Blocks;
+    //        if (blocks.Count != 0)
+    //        {
+    //            if (cubes[i].GetComponent<SphereCollider>())
+    //            {
+    //                all_spheres = FindObjectsOfType<SphereCollider>();
+    //                all_rigidbodies = FindObjectsOfType<Rigidbody>();
+    //                foreach (SphereCollider sphere_collider in all_spheres)
+    //                {
+    //                    sphere_collider.enabled = false;
+    //                }
+    //                foreach (Rigidbody rigidbody in all_rigidbodies)
+    //                {
+    //                    Destroy(rigidbody);
+    //                }
+    //            }
+    //        }
+    //    }
 
-		while (!CanvasManager.bIsPlaying)
-		{
-			yield return new WaitForSeconds(0.1f);
-		}
+    //    while (!CanvasManager.bIsPlaying)
+    //    {
+    //        yield return new WaitForSeconds(0.1f);
+    //    }
 
-		// Si on est en partie
-		while (CanvasManager.bIsPlaying)
-		{
-			int avg = 50;
-			int previousPercent = 0;
-			float natureOccupation = 0;
-			// Pour chaque case
-			for (int i = 0; i < size; i++)
-			{
-				InfosCase blockInfo = cubes[i].GetComponent<InfosCase>();
-				previousPercent = blockInfo.Percent;
-				avg = 0;
-				// On fait la moyenne des cases voisines
-				foreach (Transform tr in blockInfo.Blocks)
-				{
-					avg += tr.GetComponent<InfosCase>().Percent;
-				}
-				avg /= blockInfo.Blocks.Count;
-				// Si on domine, on gagne 1% + les bonus
-				if (avg > 50)
-				{
-					blockInfo.Percent += Mathf.RoundToInt(1 + (int) (blockInfo.Bonus / 100f * 5));
-				}
-				// Sinon on perd 1 % moins les bonus qu'on a
-				else
-				{
-					blockInfo.Percent -= Mathf.RoundToInt(1 - (int) (blockInfo.Bonus / 100f * 5));
-				}
+    //    // Si on est en partie
+    //    while (CanvasManager.bIsPlaying)
+    //    {
+    //        int avg = 50;
+    //        int previousPercent = 0;
+    //        float natureOccupation = 0;
+    //        // Pour chaque case
+    //        for (int i = 0; i < size; i++)
+    //        {
+    //            InfosCase blockInfo = cubes[i].GetComponent<InfosCase>();
+    //            previousPercent = blockInfo.Percent;
+    //            avg = 0;
+    //            // On fait la moyenne des cases voisines
+    //            foreach (Transform tr in blockInfo.Blocks)
+    //            {
+    //                avg += tr.GetComponent<InfosCase>().Percent;
+    //            }
+    //            avg /= blockInfo.Blocks.Count;
+    //            // Si on domine, on gagne 1% + les bonus
+    //            if (avg > 50)
+    //            {
+    //                blockInfo.Percent += Mathf.RoundToInt(1 + (int) (blockInfo.Bonus / 100f * 5));
+    //            }
+    //            // Sinon on perd 1 % moins les bonus qu'on a
+    //            else
+    //            {
+    //                blockInfo.Percent -= Mathf.RoundToInt(1 - (int) (blockInfo.Bonus / 100f * 5));
+    //            }
 
-				// On reste entre 0 et 100
-				blockInfo.Percent = Mathf.Clamp(blockInfo.Percent, 0, 100);
+    //            // On reste entre 0 et 100
+    //            blockInfo.Percent = Mathf.Clamp(blockInfo.Percent, 0, 100);
 
-				// Et on met à jour les textures
-				if (blockInfo.Percent > 50)
-				{
-					if (previousPercent <= 50)
-					{
-						canvas.AddCredits(30);
-                    }
-					natureOccupation += 1;
-					blockInfo.GetComponent<MeshRenderer>().material = blockInfo.nature;
-					blockInfo.transform.GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
-				}
-				else
-				{
-					blockInfo.GetComponent<MeshRenderer>().material = blockInfo.human;
-					blockInfo.transform.GetChild (0).GetComponentInChildren<MeshRenderer>().enabled = true;
-				}
-			}
-			natureOccupation /= (float)size;
-			canvas.occupationAmount = natureOccupation;
-			yield return new WaitForSeconds(1f);
-		}
-	}
+    //            // Et on met à jour les textures
+    //            if (blockInfo.Percent > 50)
+    //            {
+    //                if (previousPercent <= 50)
+    //                {
+    //                    canvas.AddCredits(30);
+    //                }
+    //                natureOccupation += 1;
+    //                blockInfo.GetComponent<MeshRenderer>().material = blockInfo.nature;
+    //                blockInfo.transform.GetChild(0).GetComponentInChildren<MeshRenderer>().enabled = false;
+    //            }
+    //            else
+    //            {
+    //                blockInfo.GetComponent<MeshRenderer>().material = blockInfo.human;
+    //                blockInfo.transform.GetChild (0).GetComponentInChildren<MeshRenderer>().enabled = true;
+    //            }
+    //        }
+    //        natureOccupation /= (float)size;
+    //        canvas.occupationAmount = natureOccupation;
+    //        yield return new WaitForSeconds(1f);
+    //    }
+    //}
 
 //    IEnumerator growOrDie()
 //    {
