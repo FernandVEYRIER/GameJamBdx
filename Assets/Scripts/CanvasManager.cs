@@ -63,10 +63,17 @@ public class CanvasManager : MonoBehaviour {
 	[HideInInspector]
 	public static bool bIsPaused = false;
 
+	void Awake()
+	{
+		bIsPaused = false;
+		bIsPlaying = false;
+	}
+
 	// Use this for initialization
 	void Start () 
 	{
 		HUD.SetActive(false);
+//		PlayerPrefs.SetInt("Display", 1);
 		if (PlayerPrefs.GetInt("Display", 1) == 1)
 		{
 			greetingBox.SetActive(true);

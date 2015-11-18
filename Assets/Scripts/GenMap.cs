@@ -25,6 +25,11 @@ public class GenMap : MonoBehaviour {
     private List<GameObject> dupli_cubes = new List<GameObject>();
     private SphereCollider[] all_spheres;
     private Rigidbody[] all_rigidbodies;
+
+	private Vector3 perlinNoiseRand = Vector3.zero;
+
+	private LibNoise.Unity.Generator.Perlin pl = new LibNoise.Unity.Generator.Perlin();
+	private float perlinRes = 0;
 	
 	private int [] statTab;
 
@@ -34,18 +39,22 @@ public class GenMap : MonoBehaviour {
         set { first = value; }
     }
 
-    void Awake() {
-    }
+    void Awake()
+	{
+		float res = 0;
 
-    private GameObject setFace(float unit) { 
-        
-		LibNoise.Unity.Generator.Perlin pl = new LibNoise.Unity.Generator.Perlin();
 		pl.Lacunarity = 1;
 		pl.OctaveCount = 2;
 		pl.Persistence = 1.96f;
 		pl.Seed = 1;
 		pl.Quality = LibNoise.Unity.QualityMode.High;
 		pl.Frequency = 1 / 80.0f;
+
+//		perlinNoiseRand = new Vector3(UnityEngine.Random.Range(0f, 10f), UnityEngine.Random.Range(0f, 10f), UnityEngine.Random.Range(0f, 10f));
+		perlinNoiseRand = Vector3.zero;
+    }
+
+    private GameObject setFace(float unit) {
 
         GameObject obj = new GameObject();
         for (uint j = 0; j < size; j++)
@@ -54,7 +63,8 @@ public class GenMap : MonoBehaviour {
             {
                 GameObject tmp = (GameObject)Instantiate(plan, new Vector3(unit * (1 + i) - (unit / 2) * size - (unit / 2), unit * (1 + j) - (unit / 2) * size - (unit / 2), (-unit / 2) * size), Quaternion.identity);
                 tmp.transform.parent = obj.transform;
-				tmp.GetComponent<InfosCase>().Percent = (int)(((pl.GetValue(tmp.transform.position) + 1.7f) / 3.0f ) * 100);
+				tmp.GetComponent<InfosCase>().Percent = (int)(((pl.GetValue(tmp.transform.position + perlinNoiseRand) + 2f) / 3.0f ) * 100);
+				perlinRes += (float)pl.GetValue(tmp.transform.position + perlinNoiseRand);
                 cubes.Add(tmp);
 
 				if (terrainProps.Length > 0)
@@ -85,7 +95,7 @@ public class GenMap : MonoBehaviour {
         }
         return obj;
     }
-	// Use this for initialization
+
 	void Start () {
 		Build();
 	}
@@ -118,6 +128,8 @@ public class GenMap : MonoBehaviour {
 		//            print(dupli_cubes[i].GetHashCode());
 		//            print(cubes[i].GetHashCode());
 		//        }
+
+		Debug.Log("Perlin average = " + perlinRes / size);
 	}
 
 	public void DestroyTerrain()
